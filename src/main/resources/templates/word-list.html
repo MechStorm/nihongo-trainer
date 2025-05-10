@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Word List</title>
+</head>
+<body>
+<h1>List of words</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Japanese word</th>
+        <th>Translation</th>
+        <th>Example</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="word : ${words}">
+        <td th:text="${word.id}"></td>
+        <td th:text="${word.japanese}"></td>
+        <td th:text="${word.translation}"></td>
+        <td th:text="${word.example}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

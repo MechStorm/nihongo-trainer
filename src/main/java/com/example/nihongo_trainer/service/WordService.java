@@ -19,15 +19,26 @@ public class WordService {
         return wordRepository.findAll();
     }
 
-    public List<Word> getWordsByLevel(String level) {
-        return wordRepository.findByLevel(level);
-    }
-
     public Word addWord(Word word) {
         return wordRepository.save(word);
     }
 
     public Optional<Word> getWordById(Long id) {
         return wordRepository.findById(id);
+    }
+
+    public Optional<Word> updateWord(Long id, Word updatedWord) {
+        return wordRepository.findById(id).map(word -> {
+            word.setJapanese(updatedWord.getJapanese());
+            word.setTranslation(updatedWord.getTranslation());
+            word.setExample(updatedWord.getExample());
+            word.setCreatedAt(updatedWord.getCreatedAt());
+
+            return wordRepository.save(word);
+        });
+    }
+
+    public void deleteWord(Long id) {
+        wordRepository.deleteById(id);
     }
 }

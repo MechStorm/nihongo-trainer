@@ -1,30 +1,34 @@
 package com.example.nihongo_trainer.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String kanji;
-    private String kana;
-    private String meaning;
-    private String level;
+    private String japanese;
+    private String translation;
+    private String example;
+    private LocalDateTime createdAt;
 
     public Word(){}
 
-    public Word(String kanji, String kana, String meaning, String level) {
-        this.kanji = kanji;
-        this.kana = kana;
-        this.meaning = meaning;
-        this.level = level;
+
+    public Word(Long id, String japanese, String translation, String example, LocalDateTime createdAt) {
+        this.id = id;
+        this.japanese = japanese;
+        this.translation = translation;
+        this.example = example;
+        this.createdAt = createdAt;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -34,35 +38,35 @@ public class Word {
         this.id = id;
     }
 
-    public String getKanji() {
-        return kanji;
+    public String getJapanese() {
+        return japanese;
     }
 
-    public void setKanji(String kanji) {
-        this.kanji = kanji;
+    public void setJapanese(String japanese) {
+        this.japanese = japanese;
     }
 
-    public String getKana() {
-        return kana;
+    public String getTranslation() {
+        return translation;
     }
 
-    public void setKana(String kana) {
-        this.kana = kana;
+    public void setTranslation(String translation) {
+        this.translation = translation;
     }
 
-    public String getMeaning() {
-        return meaning;
+    public String getExample() {
+        return example;
     }
 
-    public void setMeaning(String meaning) {
-        this.meaning = meaning;
+    public void setExample(String example) {
+        this.example = example;
     }
 
-    public String getLevel() {
-        return level;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

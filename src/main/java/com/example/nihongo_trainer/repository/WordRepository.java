@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WordRepository extends JpaRepository<Word, Long> {
-    List<Word> findByLevel(String level);
-}
+public interface WordRepository extends JpaRepository<Word, Long> {}
