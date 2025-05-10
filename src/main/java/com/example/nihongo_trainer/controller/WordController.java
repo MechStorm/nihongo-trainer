@@ -21,7 +21,7 @@ public class WordController {
     @PostMapping("/words-list")
     public String addWord(@ModelAttribute Word word) {
         wordService.addWord(word);
-        return "redirect:/words-list";
+        return "redirect:/api/words/words-list";
     }
 
     @PutMapping("/{id}")
@@ -46,6 +46,7 @@ public class WordController {
     @GetMapping("/words-list")
     public String showWords(Model model) {
         model.addAttribute("words", wordService.getAllWords());
+        model.addAttribute("newWord", new Word());
         return "word-list";
     }
 }

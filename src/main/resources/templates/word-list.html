@@ -25,5 +25,19 @@
     </tr>
     </tbody>
 </table>
+<hr>
+<h2>Add new word</h2>
+<form th:action="@{/api/words/words-list}" th:object="${newWord}" method="post">
+    <label>Japanese word:
+        <input type="text" th:field="*{japanese}" required/>
+    </label><br>
+    <label>Translation:
+        <input type="text" th:field="*{translation}" required/>
+    </label><br>
+    <label>Example:
+        <input type="text" th:field="*{example}" required/>
+    </label><br>
+    <button type="submit">Add</button>
+</form>
 </body>
 </html>
