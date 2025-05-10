@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/api/words")
 public class WordController {
@@ -24,23 +22,16 @@ public class WordController {
         return "redirect:/api/words/words-list";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Word> updateWord(@PathVariable Long id, @RequestBody Word updatedWord) {
-        return wordService.updateWord(id, updatedWord)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/words-list/edit")
+    public String updateWord(@ModelAttribute Word word) {
+        wordService.addWord(word);
+        return "redirect:/api/words/words-list";
     }
 
-    @GetMapping("/{id}")
-    public Word getWordById(@PathVariable Long id) {
-        return wordService.getWordById(id)
-                .orElseThrow(() -> new RuntimeException("Word not found!"));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWord(@PathVariable Long id) {
+    @PostMapping("/words-list/delete/{id}")
+    public String deleteWord(@PathVariable Long id) {
         wordService.deleteWord(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/api/words/words-list";
     }
 
     @GetMapping("/words-list")
@@ -48,5 +39,12 @@ public class WordController {
         model.addAttribute("words", wordService.getAllWords());
         model.addAttribute("newWord", new Word());
         return "word-list";
+    }
+
+    @GetMapping("/words-list/edit/{id}")
+    public String editWord(@PathVariable Long id, Model model) {
+        Word word = wordService.getWordById(id);
+        model.addAttribute("word", word);
+        return "edit-word";
     }
 }

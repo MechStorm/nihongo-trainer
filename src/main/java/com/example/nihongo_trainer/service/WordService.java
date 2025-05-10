@@ -23,8 +23,8 @@ public class WordService {
         return wordRepository.save(word);
     }
 
-    public Optional<Word> getWordById(Long id) {
-        return wordRepository.findById(id);
+    public Word getWordById(Long id) {
+        return wordRepository.findById(id).orElseThrow(() -> new RuntimeException("Word not found"));
     }
 
     public Optional<Word> updateWord(Long id, Word updatedWord) {

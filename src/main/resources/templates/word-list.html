@@ -22,6 +22,10 @@
         <td th:text="${word.japanese}"></td>
         <td th:text="${word.translation}"></td>
         <td th:text="${word.example}"></td>
+        <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post" style="display:block">
+            <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>
+            <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
+        </form>
     </tr>
     </tbody>
 </table>
