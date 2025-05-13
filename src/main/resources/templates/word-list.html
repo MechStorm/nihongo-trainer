@@ -2,10 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Word List</title>
+    <title>Dictionary</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>List of words</h1>
+<h1>Dictionary</h1>
+
+<div th:each="word : ${words}" class="card">
+    <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
+    <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>
+    <p><strong>Example:</strong><span th:text="${word.example}"></span></p>
+    <p><strong>Date created:</strong><span th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
+    <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post" style="display:inline-block">
+        <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>
+    </form>
+</div>
 
 <table border="1">
     <thead>
@@ -17,15 +29,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="word : ${words}">
+        <tr th:each="word : ${words}" class="card">
         <td th:text="${word.id}"></td>
         <td th:text="${word.japanese}"></td>
         <td th:text="${word.translation}"></td>
         <td th:text="${word.example}"></td>
-        <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post" style="display:block">
-            <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>
-            <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
-        </form>
+        <td th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+<!--        <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post" style="display:inline-block">-->
+<!--            <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>-->
+<!--            <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>-->
+<!--        </form>-->
     </tr>
     </tbody>
 </table>

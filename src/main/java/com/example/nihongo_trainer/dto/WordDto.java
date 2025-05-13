@@ -1,36 +1,20 @@
-package com.example.nihongo_trainer.entity;
-
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+package com.example.nihongo_trainer.dto;
 
 import java.time.LocalDateTime;
 
-@Entity
-public class Word {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class WordDto {
     private Long id;
     private String japanese;
     private String translation;
     private String example;
-    @CreationTimestamp
-    @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public Word(){}
-
-
-    public Word(Long id, String japanese, String translation, String example, LocalDateTime createdAt) {
+    public WordDto(Long id, String japanese, String translation, String example, LocalDateTime createdAt) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
         this.example = example;
         this.createdAt = createdAt;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {

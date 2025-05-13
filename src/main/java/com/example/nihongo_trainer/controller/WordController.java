@@ -2,7 +2,6 @@ package com.example.nihongo_trainer.controller;
 
 import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.service.WordService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class WordController {
 
     @GetMapping("/words-list")
     public String showWords(Model model) {
-        model.addAttribute("words", wordService.getAllWords());
+        model.addAttribute("words", wordService.getAllWordsSorted());
         model.addAttribute("newWord", new Word());
         return "word-list";
     }
