@@ -1,10 +1,14 @@
 package com.example.nihongo_trainer.controller;
 
+import com.example.nihongo_trainer.dto.WordDto;
 import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.service.WordService;
+import com.example.nihongo_trainer.utility.SortOption;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/words")
@@ -34,9 +38,13 @@ public class WordController {
     }
 
     @GetMapping("/words-list")
-    public String showWords(Model model) {
-        model.addAttribute("words", wordService.getAllWordsSorted());
+    public String showWords(@RequestParam(defaultValue = "CREATED_DESC") String sort, Model model) {
+        SortOption sortOption = SortOption.from(sort);
+        List<WordDto> words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
+
+        model.addAttribute("words", words);
         model.addAttribute("newWord", new Word());
+        model.addAttribute("currentSort", sortOption.name());
         return "word-list";
     }
 

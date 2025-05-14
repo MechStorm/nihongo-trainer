@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -32,16 +33,16 @@ public class WordService {
         return wordRepository.findById(id).orElseThrow(() -> new RuntimeException("Word not found"));
     }
 
-    public Optional<Word> updateWord(Long id, Word updatedWord) {
-        return wordRepository.findById(id).map(word -> {
-            word.setJapanese(updatedWord.getJapanese());
-            word.setTranslation(updatedWord.getTranslation());
-            word.setExample(updatedWord.getExample());
-            word.setCreatedAt(updatedWord.getCreatedAt());
-
-            return wordRepository.save(word);
-        });
-    }
+//    public Optional<Word> updateWord(Long id, Word updatedWord) {
+//        return wordRepository.findById(id).map(word -> {
+//            word.setJapanese(updatedWord.getJapanese());
+//            word.setTranslation(updatedWord.getTranslation());
+//            word.setExample(updatedWord.getExample());
+//            word.setCreatedAt(updatedWord.getCreatedAt());
+//
+//            return wordRepository.save(word);
+//        });
+//    }
 
     public void deleteWord(Long id) {
         wordRepository.deleteById(id);
@@ -60,8 +61,8 @@ public class WordService {
         return Optional.of(allWords.get(random.nextInt(allWords.size())));
     }
 
-    public List<WordDto> getAllWordsSorted() {
-        return wordRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
+    public List<WordDto> getAllWordsSorted(String field, Sort.Direction direction) {
+               return wordRepository.findAll(Sort.by(direction, field))
                 .stream()
                 .map(word -> new WordDto(
                         word.getId(),
