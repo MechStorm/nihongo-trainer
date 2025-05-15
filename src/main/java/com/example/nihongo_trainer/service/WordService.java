@@ -3,6 +3,7 @@ package com.example.nihongo_trainer.service;
 import com.example.nihongo_trainer.dto.WordDto;
 import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.repository.WordRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -33,17 +34,19 @@ public class WordService {
         return wordRepository.findById(id).orElseThrow(() -> new RuntimeException("Word not found"));
     }
 
-//    public Optional<Word> updateWord(Long id, Word updatedWord) {
-//        return wordRepository.findById(id).map(word -> {
-//            word.setJapanese(updatedWord.getJapanese());
-//            word.setTranslation(updatedWord.getTranslation());
-//            word.setExample(updatedWord.getExample());
-//            word.setCreatedAt(updatedWord.getCreatedAt());
-//
-//            return wordRepository.save(word);
-//        });
-//    }
+    @Transactional
+    public Optional<Word> updateWord(Long id, Word updatedWord) {
+        return wordRepository.findById(id).map(word -> {
+            word.setJapanese(updatedWord.getJapanese());
+            word.setTranslation(updatedWord.getTranslation());
+            word.setExample(updatedWord.getExample());
+            word.setCreatedAt(updatedWord.getCreatedAt());
 
+            return wordRepository.save(word);
+        });
+    }
+
+    @Transactional
     public void deleteWord(Long id) {
         wordRepository.deleteById(id);
     }
@@ -62,7 +65,7 @@ public class WordService {
     }
 
     public List<WordDto> getAllWordsSorted(String field, Sort.Direction direction) {
-               return wordRepository.findAll(Sort.by(direction, field))
+        return wordRepository.findAll(Sort.by(direction, field))
                 .stream()
                 .map(word -> new WordDto(
                         word.getId(),
@@ -72,7 +75,13 @@ public class WordService {
                         word.getCreatedAt()
                                 .atZone(ZoneId.of("UTC"))
                                 .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
+                                .toLocalDateTime(),
+                        word.getUpdatedAt() != null
+                        ? word.getUpdatedAt().atZone(ZoneId.of("UTC"))
+                                .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
                                 .toLocalDateTime()
+                                : null
+
                 ))
                 .collect(Collectors.toList());
     }

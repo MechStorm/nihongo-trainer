@@ -6,7 +6,9 @@ public enum SortOption {
     CREATED_ASC("createdAt", Sort.Direction.ASC),
     CREATED_DESC("createdAt", Sort.Direction.DESC),
     ALPHA_ASC("japanese", Sort.Direction.ASC),
-    ALPHA_DESC("japanese", Sort.Direction.DESC);
+    ALPHA_DESC("japanese", Sort.Direction.DESC),
+    UPDATE_ASC("updatedAt", Sort.Direction.ASC),
+    UPDATE_DESC("updatedAt", Sort.Direction.DESC);
 
     private final String field;
     private final Sort.Direction direction;

@@ -17,6 +17,8 @@
             <option th:value="CREATED_ASC" th:selected="${currentSort == 'CREATED_ASC'}">By date (older)</option>
             <option th:value="ALPHA_ASC" th:selected="${currentSort == 'ALPHA_ASC'}">By alphabet (A-Z)</option>
             <option th:value="ALPHA_DESC" th:selected="${currentSort == 'ALPHA_DESC'}">By alphabet (Z-A)</option>
+            <option th:value="UPDATE_ASC" th:selected="${currentSort == 'UPDATE_ASC'}">By updated (older)</option>
+            <option th:value="UPDATE_DESC" th:selected="${currentSort == 'UPDATE_DESC'}">By updated (newer)</option>
         </select>
     </form>
 
@@ -25,6 +27,7 @@
         <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>
         <p><strong>Example:</strong><span th:text="${word.example}"></span></p>
         <p><strong>Date created:</strong><span th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+        <p><strong>Date updated:</strong><span th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
         <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
         <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post" style="display:inline-block">
             <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>
@@ -50,6 +53,7 @@
         <td th:text="${word.translation}"></td>
         <td th:text="${word.example}"></td>
         <td th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}">n/a</td>
     </tr>
     </tbody>
 </table>

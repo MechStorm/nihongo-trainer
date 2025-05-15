@@ -8,13 +8,15 @@ public class WordDto {
     private String translation;
     private String example;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public WordDto(Long id, String japanese, String translation, String example, LocalDateTime createdAt) {
+    public WordDto(Long id, String japanese, String translation, String example, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
         this.example = example;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -55,5 +57,13 @@ public class WordDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

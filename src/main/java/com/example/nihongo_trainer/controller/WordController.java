@@ -4,6 +4,7 @@ import com.example.nihongo_trainer.dto.WordDto;
 import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.service.WordService;
 import com.example.nihongo_trainer.utility.SortOption;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 public class WordController {
     private final WordService wordService;
 
+    @Autowired
     public WordController(WordService wordService) {
         this.wordService = wordService;
     }

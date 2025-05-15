@@ -1,11 +1,14 @@
 package com.example.nihongo_trainer.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,19 +16,24 @@ public class Word {
     private String japanese;
     private String translation;
     private String example;
-    @CreationTimestamp
+    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Word(){}
 
-
-    public Word(Long id, String japanese, String translation, String example, LocalDateTime createdAt) {
+    public Word(Long id, String japanese, String translation, String example, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
         this.example = example;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     @PrePersist
@@ -71,5 +79,21 @@ public class Word {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
