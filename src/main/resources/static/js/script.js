@@ -1,22 +1,19 @@
-function toggleCreateForm() {
-    const form = document.getElementById('createCategoryForm');
-    if (form) {
-        form.classList.toggle('hidden');
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const openBtn = document.getElementById("openModalBtn");
+    const modal = document.getElementById("categoryModal");
+    const closeBtn = document.getElementById("closeModalBtn");
 
-    console.log('ok');
-    console.log(form);
-}
+    openBtn.addEventListener("click", () => {
+        modal.style.display = "block";
+    });
 
-function toggleEditForm(id) {
-    const label = document.getElementById('label-' + id);
-    const form = document.getElementById('form-' + id);
-    if (label && form) {
-        label.classList.toggle('hidden');
-        form.classList.toggle('hidden');
-    }
+    closeBtn.addEventListener("click", () => {
+       modal.style.display = "none";
+    });
 
-    console.log('ok');
-    console.log(form);
-    console.log(label);
-}
+    window.addEventListener("click", (e) => {
+        if(e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});

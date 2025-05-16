@@ -29,25 +29,20 @@ public class CategoryController {
     }
 
     @PostMapping
-    public String createCategory(@RequestParam String name, RedirectAttributes redirectAttributes) {
-        categoryService.saveCategory(new Category(name));
-        redirectAttributes.addFlashAttribute("success", "Category was created.");
+    public String createCategory(@ModelAttribute Category category) {
+        categoryService.saveCategory(category);
         return "redirect:/categories";
     }
 
-    @PostMapping("/{id}")
-    public String updateCategory(@PathVariable Long id,
-                                 @RequestParam String name,
-                                 RedirectAttributes redirectAttributes) {
-        categoryService.updateCategory(id, new CategoryDto(id, name));
-        redirectAttributes.addFlashAttribute("success", "Category was updated.");
+    @PostMapping("/edit/{id}")
+    public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto) {
+        categoryService.updateCategory(id, categoryDto);
         return "redirect:/categories";
     }
 
-    @PostMapping(value = "/{id}", params = "_method=delete")
-    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @PostMapping("/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        redirectAttributes.addFlashAttribute("success", "Category was deleted.");
         return "redirect:/categories";
     }
 }

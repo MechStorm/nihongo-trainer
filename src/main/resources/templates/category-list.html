@@ -6,53 +6,42 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Category management</h1>
+<div class="container">
+    <h1>Categories</h1>
+    <button id="openModalBtn" class="btn">Create category</button>
 
-<div th:if="${success}" class="notification success" th:text="success"></div>
-<div th:if="${error}" class="notification error" th:text="error"></div>
+<!--Modal-->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="close">&times;</span>
+            <h2>New category</h2>
+            <form th:action="@{/categories}" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
 
-<!--<button class="btn btn-create_primary" onclick="toggleCreateForm()">Create category</button>-->
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+                <button type="submit" class="btn">Create</button>
+            </form>
+        </div>
+    </div>
 
-<div id="createCategoryForm" class="form-container hidden">
-    <form th:action="@{/categories}" method="post">
-        <input type="text" name="name" placeholder="Name of category" required>
-        <button type="submit" class="btn btn-create_secondary">Save</button>
-    </form>
+<!--Category list-->
+    <div class="category-grid">
+        <div class="category-card" th:each="category : ${categories}">
+            <h3 th:text="${category.name}">Name</h3>
+<!--            <p th:text="${category.description}">Description</p>-->
+<!--            <p>Words in category: <span th:text="${category.wordCount}">0</span></p>-->
+            <div class="card-actions">
+                <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn small">Edit</a>
+                <form th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" th:object="${category}">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn small danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="category : ${categories}">
-        <td th:text="${category.id}"></td>
-        <td>
-            <span th:text="${category.name}" th:id="'label-' + ${category.id}"></span>
-
-            <form th:id="'form-' + ${category.id}" class="inline-form hidden"
-                  th:action="@{|/categories/${category.id}|}" method="post">
-                <input type="hidden" name="_method" value="put"/>
-                <input type="text" name="name" th:value="${category.name}" required/>
-                <button type="submit" class="btn btn-create_secondary">Save</button>
-            </form>
-        </td>
-        <td>
-            <button class="btn btn-create_primary" th:onclick="'toggleEditForm(' + ${category.id} + ')'">Edit</button>
-
-            <form th:action="@{|/categories/${category.id}|}" method="post" class="inline-form"
-                  onsubmit="return confirm('Delete category?');">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
 
 <script th:src="@{/js/script.js}"></script>
 </body>
