@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -34,9 +33,9 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @PostMapping("/edit/{id}")
-    public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto) {
-        categoryService.updateCategory(id, categoryDto);
+    @PostMapping("/edit")
+    public String updateCategory(@ModelAttribute Category category) {
+        categoryService.saveCategory(category);
         return "redirect:/categories";
     }
 
@@ -44,5 +43,12 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return "redirect:/categories";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editCategory(@PathVariable Long id, Model model) {
+        Category category = categoryService.getCategoryById(id);
+        model.addAttribute("category", category);
+        return "edit-category";
     }
 }
