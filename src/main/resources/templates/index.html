@@ -2,9 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nihongo Trainer</title>
+    <title th:fragment="title">Main</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1 th:text="${message}"></h1>
+<!--<div th:fragment="content">-->
+    <div class="main-header">
+        <h1>Nihongo trainer</h1>
+        <p>Welcome! Choose the section:</p>
+    </div>
+
+    <div class="menu-container">
+        <a href="/api/words/words-list" class="menu-card">
+            <h2>Cards with words</h2>
+            <p>Manage, learn and sort Japanese words</p>
+        </a>
+        <a href="/categories" class="menu-card">
+            <h2>Categories</h2>
+            <p>Create and group words by topic</p>
+        </a>
+    </div>
+<!--</div>-->
 </body>
 </html>
