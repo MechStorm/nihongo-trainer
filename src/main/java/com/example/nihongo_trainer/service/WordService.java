@@ -1,7 +1,9 @@
 package com.example.nihongo_trainer.service;
 
 import com.example.nihongo_trainer.dto.WordDto;
+import com.example.nihongo_trainer.entity.Category;
 import com.example.nihongo_trainer.entity.Word;
+import com.example.nihongo_trainer.repository.CategoryRepository;
 import com.example.nihongo_trainer.repository.WordRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
@@ -17,16 +19,30 @@ import java.util.stream.Collectors;
 @Service
 public class WordService {
     private final WordRepository wordRepository;
+    private final CategoryRepository categoryRepository;
 
-    public WordService(WordRepository wordRepository) {
+    public WordService(WordRepository wordRepository, CategoryRepository categoryRepository) {
         this.wordRepository = wordRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Word> getAllWords() {
         return wordRepository.findAll();
     }
 
-    public Word addWord(Word word) {
+    public Word addWord(WordDto wordDto) {
+        Word word = new Word();
+        word.setJapanese(wordDto.getJapanese());
+        word.setTranslation(wordDto.getTranslation());
+        word.setExample(wordDto.getExample());
+
+        if (wordDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(wordDto.getCategoryId()).orElseThrow();
+            word.setCategory(category);
+        } else {
+            word.setCategory(null);
+        }
+
         return wordRepository.save(word);
     }
 
@@ -35,15 +51,20 @@ public class WordService {
     }
 
     @Transactional
-    public Optional<Word> updateWord(Long id, Word updatedWord) {
-        return wordRepository.findById(id).map(word -> {
-            word.setJapanese(updatedWord.getJapanese());
-            word.setTranslation(updatedWord.getTranslation());
-            word.setExample(updatedWord.getExample());
-            word.setCreatedAt(updatedWord.getCreatedAt());
+    public Word updateWord(WordDto wordDto) {
+        Word word = wordRepository.findById(wordDto.getId()).orElseThrow(() -> new RuntimeException("Word not found"));
+        word.setJapanese(wordDto.getJapanese());
+        word.setTranslation(wordDto.getTranslation());
+        word.setExample(wordDto.getExample());
 
-            return wordRepository.save(word);
-        });
+        if (wordDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(wordDto.getCategoryId()).orElseThrow();
+            word.setCategory(category);
+        } else {
+            word.setCategory(null);
+        }
+
+        return wordRepository.save(word);
     }
 
     @Transactional
@@ -77,11 +98,11 @@ public class WordService {
                                 .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
                                 .toLocalDateTime(),
                         word.getUpdatedAt() != null
-                        ? word.getUpdatedAt().atZone(ZoneId.of("UTC"))
+                                ? word.getUpdatedAt().atZone(ZoneId.of("UTC"))
                                 .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
                                 .toLocalDateTime()
-                                : null
-
+                                : null,
+                        word.getCategory() != null ? word.getCategory().getId() : null
                 ))
                 .collect(Collectors.toList());
     }

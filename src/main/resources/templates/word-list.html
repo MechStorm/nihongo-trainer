@@ -28,6 +28,7 @@
                 th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
         <p><strong>Date updated:</strong><span
                 th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+        <!--        <p><strong>Category:</strong><span th:text="${word.category}"></span></p>-->
         <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
         <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post"
               style="display:inline-block">
@@ -68,6 +69,15 @@
         </label><br>
         <label>Example:
             <input type="text" th:field="*{example}" required/>
+        </label><br>
+        <label>Category:
+            <select th:field="*{categoryId}">
+                <option value="" th:text="'-- No category --'"
+                        th:selected="${newWord.categoryId == null}"></option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
         </label><br>
         <button type="submit">Add</button>
     </form>

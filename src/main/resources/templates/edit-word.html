@@ -18,6 +18,15 @@
         <label>Example:
             <input type="text" th:field="*{example}" required/>
         </label><br>
+        <label>Category:
+            <select th:field="*{categoryId}">
+                <option value="" th:text="'-- No category --'"
+                        th:selected="${word.categoryId == null}"></option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
+        </label><br>
         <button type="submit">Save</button>
     </form>
     <a th:href="@{/api/words/words-list}">Back to list</a>
