@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title th:fragment="title">Main</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <th:block th:replace="~{layout :: head}"></th:block>
 </head>
 <body>
-<!--<div th:fragment="content">-->
+<th:block th:replace="~{layout :: header}"></th:block>
+<div th:fragment="content" class="container">
     <div class="main-header">
         <h1>Nihongo trainer</h1>
         <p>Welcome! Choose the section:</p>
@@ -22,6 +21,6 @@
             <p>Create and group words by topic</p>
         </a>
     </div>
-<!--</div>-->
+</div>
 </body>
 </html>

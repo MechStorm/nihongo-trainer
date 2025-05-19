@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="head">
     <meta charset="UTF-8">
-    <title th:replace="${title}">Nihongo Trainer</title>
+    <title>Nihongo Trainer</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<header class="navbar">
+<header th:fragment="header" class="navbar">
     <div class="navbar-container">
-        <a href="/home" class="navbar-brand">🏯 Nihongo Trainer</a>
+        <a href="/" class="navbar-brand">🏯 Nihongo Trainer</a>
         <nav>
             <ul class="navbar-links">
                 <li><a href="/api/words/words-list">Cards with words</a></li>
@@ -19,7 +19,7 @@
 </header>
 
 <main class="page-content">
-    <div th:replace="${content}"></div>
+    <div th:replace="~{::content}"></div>
 </main>
 
 <script th:src="@{/js/script.js}"></script>
