@@ -66,7 +66,8 @@ public class WordController {
                 word.getExample(),
                 word.getCreatedAt(),
                 word.getUpdatedAt(),
-                word.getCategory() != null ? word.getCategory().getId() : null
+                word.getCategory() != null ? word.getCategory().getId() : null,
+                word.getCategory() != null ? word.getCategory().getName() : null
         );
 
         model.addAttribute("word", wordDto);

@@ -10,10 +10,12 @@ public class WordDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long categoryId;
+    private String categoryName;
 
     public WordDto() {}
 
-    public WordDto(Long id, String japanese, String translation, String example, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId) {
+    public WordDto(Long id, String japanese, String translation, String example,
+                   LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, String categoryName) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
@@ -21,6 +23,7 @@ public class WordDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -77,5 +80,13 @@ public class WordDto {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

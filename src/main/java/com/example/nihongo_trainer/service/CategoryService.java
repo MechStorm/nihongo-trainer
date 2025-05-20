@@ -2,7 +2,9 @@ package com.example.nihongo_trainer.service;
 
 import com.example.nihongo_trainer.dto.CategoryDto;
 import com.example.nihongo_trainer.entity.Category;
+import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.repository.CategoryRepository;
+import com.example.nihongo_trainer.repository.WordRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final WordRepository wordRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, WordRepository wordRepository) {
         this.categoryRepository = categoryRepository;
+        this.wordRepository = wordRepository;
     }
 
     public List<CategoryDto> getAllCategories() {
@@ -45,6 +49,14 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+
+        List<Word> words = category.getWords();
+        for (Word word : words) {
+            word.setCategory(null);
+        }
+        wordRepository.saveAll(words);
+
         categoryRepository.deleteById(id);
     }
 }

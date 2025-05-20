@@ -37,7 +37,7 @@ public class WordService {
         word.setExample(wordDto.getExample());
 
         if (wordDto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(wordDto.getCategoryId()).orElseThrow();
+            Category category = categoryRepository.findById(wordDto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
             word.setCategory(category);
         } else {
             word.setCategory(null);
@@ -102,7 +102,8 @@ public class WordService {
                                 .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
                                 .toLocalDateTime()
                                 : null,
-                        word.getCategory() != null ? word.getCategory().getId() : null
+                        word.getCategory() != null ? word.getCategory().getId() : null,
+                        word.getCategory() != null ? word.getCategory().getName() : null
                 ))
                 .collect(Collectors.toList());
     }

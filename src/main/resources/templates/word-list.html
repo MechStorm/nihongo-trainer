@@ -28,7 +28,7 @@
                 th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
         <p><strong>Date updated:</strong><span
                 th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-        <!--        <p><strong>Category:</strong><span th:text="${word.category}"></span></p>-->
+        <p><strong>Category:</strong><span th:text="${word.categoryName != null ? word.categoryName : '-'}"></span></p>
         <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
         <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post"
               style="display:inline-block">
@@ -43,6 +43,7 @@
             <th>Japanese word</th>
             <th>Translation</th>
             <th>Example</th>
+            <th>Category</th>
             <th>Date created</th>
             <th>Date updated</th>
         </tr>
@@ -53,6 +54,7 @@
             <td th:text="${word.japanese}"></td>
             <td th:text="${word.translation}"></td>
             <td th:text="${word.example}"></td>
+            <td th:text="${word.categoryName != null ? word.categoryName : '-'}"></td>
             <td th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
             <td th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}">n/a</td>
         </tr>
