@@ -30,7 +30,7 @@
         <div class="category-card" th:each="category : ${categories}">
             <h3 th:text="${category.name}">Name</h3>
 <!--            <p th:text="${category.description}">Description</p>-->
-<!--            <p>Words in category: <span th:text="${category.wordCount}">0</span></p>-->
+            <p>Words in category: <span th:text="${category.wordCount}"></span></p>
             <div class="card-actions">
                 <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn small">Edit</a>
                 <form th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" th:object="${category}">

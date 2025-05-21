@@ -3,12 +3,14 @@ package com.example.nihongo_trainer.dto;
 public class CategoryDto {
     private Long id;
     private String name;
+    private int wordCount;
 
     public CategoryDto() {}
 
-    public CategoryDto(Long id, String name) {
+    public CategoryDto(Long id, String name, int wordCount) {
         this.id = id;
         this.name = name;
+        this.wordCount = wordCount;
     }
 
 
@@ -26,5 +28,13 @@ public class CategoryDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
     }
 }
