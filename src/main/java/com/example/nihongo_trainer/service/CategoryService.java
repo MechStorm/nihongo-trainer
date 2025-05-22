@@ -22,12 +22,14 @@ public class CategoryService {
     }
 
     public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll()
-                .stream()
-                .map(cat -> new CategoryDto(cat.getId(),
-                        cat.getName(),
-                        cat.getWords() != null ? cat.getWords().size() : 0))
-                .collect(Collectors.toList());
+//        return categoryRepository.findAll()
+//                .stream()
+//                .map(cat -> new CategoryDto(cat.getId(),
+//                        cat.getName(),
+//                        cat.getWords() != null ? cat.getWords().size() : 0))
+//                .collect(Collectors.toList());
+
+        return categoryRepository.findAllWithWordCount();
     }
 
     public Category getCategoryById(Long id) {

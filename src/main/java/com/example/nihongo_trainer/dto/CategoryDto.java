@@ -3,16 +3,15 @@ package com.example.nihongo_trainer.dto;
 public class CategoryDto {
     private Long id;
     private String name;
-    private int wordCount;
+    private Long wordCount;
 
     public CategoryDto() {}
 
-    public CategoryDto(Long id, String name, int wordCount) {
+    public CategoryDto(Long id, String name, Long wordCount) {
         this.id = id;
         this.name = name;
         this.wordCount = wordCount;
     }
-
 
     public Long getId() {
         return id;
@@ -30,11 +29,11 @@ public class CategoryDto {
         this.name = name;
     }
 
-    public int getWordCount() {
+    public Long getWordCount() {
         return wordCount;
     }
 
-    public void setWordCount(int wordCount) {
+    public void setWordCount(Long wordCount) {
         this.wordCount = wordCount;
     }
 }

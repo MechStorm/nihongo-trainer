@@ -5,15 +5,13 @@ import com.example.nihongo_trainer.entity.Category;
 import com.example.nihongo_trainer.entity.Word;
 import com.example.nihongo_trainer.repository.CategoryRepository;
 import com.example.nihongo_trainer.repository.WordRepository;
+import com.example.nihongo_trainer.utility.WordMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,9 +70,11 @@ public class WordService {
         wordRepository.deleteById(id);
     }
 
-    public List<Word> searchWords(String query) {
-        return wordRepository.findByJapaneseContainingIgnoreCaseOrTranslationContainingIgnoreCase(query, query);
-    }
+    /*public List<WordDto> searchWords(String query) {
+        return wordRepository.searchWords(query).stream().map(word -> new WordDto(
+
+        ));
+    }*/
 
     public Optional<Word> getRandomWord() {
         List<Word> allWords = wordRepository.findAll();
@@ -88,23 +88,7 @@ public class WordService {
     public List<WordDto> getAllWordsSorted(String field, Sort.Direction direction) {
         return wordRepository.findAll(Sort.by(direction, field))
                 .stream()
-                .map(word -> new WordDto(
-                        word.getId(),
-                        word.getJapanese(),
-                        word.getTranslation(),
-                        word.getExample(),
-                        word.getCreatedAt()
-                                .atZone(ZoneId.of("UTC"))
-                                .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
-                                .toLocalDateTime(),
-                        word.getUpdatedAt() != null
-                                ? word.getUpdatedAt().atZone(ZoneId.of("UTC"))
-                                .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
-                                .toLocalDateTime()
-                                : null,
-                        word.getCategory() != null ? word.getCategory().getId() : null,
-                        word.getCategory() != null ? word.getCategory().getName() : null
-                ))
+                .map(WordMapper::toDto)
                 .collect(Collectors.toList());
     }
 }
