@@ -20,6 +20,11 @@
         </select>
     </form>
 
+    <form th:action="@{/api/words/words-list/search}" method="get">
+        <input type="text" name="query" placeholder="Search..." th:value="${query}">
+        <button type="submit">Search</button>
+    </form>
+
     <div th:each="word : ${words}" class="card">
         <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
         <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>

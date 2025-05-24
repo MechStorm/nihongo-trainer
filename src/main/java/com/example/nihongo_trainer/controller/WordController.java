@@ -74,4 +74,13 @@ public class WordController {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "edit-word";
     }
+
+    @GetMapping("/words-list/search")
+    public String searchWords(@RequestParam("query") String query, Model model) {
+        List<WordDto> words = wordService.searchWords(query);
+        model.addAttribute("newWord", new WordDto());
+        model.addAttribute("words", words);
+        model.addAttribute("query", query);
+        return "word-list";
+    }
 }

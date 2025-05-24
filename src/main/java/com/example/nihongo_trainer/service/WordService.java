@@ -70,11 +70,11 @@ public class WordService {
         wordRepository.deleteById(id);
     }
 
-    /*public List<WordDto> searchWords(String query) {
-        return wordRepository.searchWords(query).stream().map(word -> new WordDto(
-
-        ));
-    }*/
+    public List<WordDto> searchWords(String query) {
+        return wordRepository.searchWords(query).stream()
+                .map(WordMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     public Optional<Word> getRandomWord() {
         List<Word> allWords = wordRepository.findAll();
