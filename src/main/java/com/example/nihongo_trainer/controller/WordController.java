@@ -76,11 +76,15 @@ public class WordController {
     }
 
     @GetMapping("/words-list/search")
-    public String searchWords(@RequestParam("query") String query, Model model) {
+    public String searchWords(@RequestParam(defaultValue = "CREATED_DESC") String sort,
+                              @RequestParam("query") String query,
+                              Model model) {
+        SortOption sortOption = SortOption.from(sort);
         List<WordDto> words = wordService.searchWords(query);
-        model.addAttribute("newWord", new WordDto());
+
+        model.addAttribute("currentSort", sortOption.name());
         model.addAttribute("words", words);
         model.addAttribute("query", query);
-        return "word-list";
+        return "search-page";
     }
 }
