@@ -87,4 +87,27 @@ public class WordController {
         model.addAttribute("query", query);
         return "search-page";
     }
+
+    @GetMapping("/words-list/filter")
+    public String filterByCategory(@RequestParam(required = false) String categoryId,
+                                   @RequestParam(defaultValue = "CREATED_DESC") String sort,
+                                   Model model) {
+        SortOption sortOption = SortOption.from(sort);
+        List<WordDto> words;
+        if (categoryId == null || categoryId.isBlank()) {
+            words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
+        } else if (categoryId.equals("none")) {
+            words = wordService.getWordsWithoutCategory();
+        } else {
+            Long id = Long.parseLong(categoryId);
+            words = wordService.getWordsByCategory(id);
+        }
+
+        model.addAttribute("words", words);
+        model.addAttribute("newWord", new WordDto());
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("categories", categoryService.getAllCategories());
+
+        return "word-list";
+    }
 }

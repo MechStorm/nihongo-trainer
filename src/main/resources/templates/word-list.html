@@ -25,6 +25,18 @@
         <button type="submit">Search</button>
     </form>
 
+    <form th:action="@{/api/words/words-list/filter}" method="get">
+        <select name="categoryId">
+            <option value="" th:selected="${selectedCategoryId == null}">All categories</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:selected="${selectedCategoryId == category.id}"
+                    th:text="${category.name}"></option>
+            <option value="none" th:selected="${selectedCategoryId == 'none'}">No category</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
     <div th:each="word : ${words}" class="card">
         <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
         <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>

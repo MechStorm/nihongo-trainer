@@ -91,4 +91,16 @@ public class WordService {
                 .map(WordMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<WordDto> getWordsByCategory(Long categoryId) {
+        return wordRepository.findByCategoryId(categoryId).stream()
+                .map(WordMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<WordDto> getWordsWithoutCategory() {
+        return wordRepository.findByCategoryIsNull().stream()
+                .map(WordMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
