@@ -7,10 +7,14 @@ import com.example.nihongo_trainer.service.CategoryService;
 import com.example.nihongo_trainer.service.WordService;
 import com.example.nihongo_trainer.utility.SortOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -44,15 +48,29 @@ public class WordController {
     }
 
     @GetMapping("/words-list")
-    public String showWords(@RequestParam(defaultValue = "CREATED_DESC") String sort, Model model) {
+    public String showWords(@RequestParam(defaultValue = "CREATED_DESC") String sort,
+                            @RequestParam(value = "categoryId", required = false) String categoryId,
+                            @RequestParam(value = "page", defaultValue = "0") int page,
+                            @RequestParam(value = "size", defaultValue = "3") int size,
+                            Model model) {
+        if (page < 0) {
+            page = 0;
+        }
+
         SortOption sortOption = SortOption.from(sort);
-        List<WordDto> words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WordDto> wordPage = wordService.getWordsByCategory(categoryId, sortOption.getField(), sortOption.getDirection(), pageable);
+        //List<WordDto> words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
         List<CategoryDto> categories = categoryService.getAllCategories();
 
-        model.addAttribute("words", words);
+        model.addAttribute("words", wordPage);
         model.addAttribute("newWord", new WordDto());
         model.addAttribute("categories", categories);
         model.addAttribute("currentSort", sortOption.name());
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("currentPage", wordPage.getNumber());
+        model.addAttribute("totalPages", wordPage.getTotalPages());
+        model.addAttribute("totalItems", wordPage.getTotalElements());
         return "word-list";
     }
 
@@ -88,17 +106,18 @@ public class WordController {
         return "search-page";
     }
 
-    @GetMapping("/words-list/filter")
+    /*@GetMapping("/words-list/filter")
     public String filterByCategory(@RequestParam(required = false) String categoryId,
                                    @RequestParam(defaultValue = "CREATED_DESC") String sort,
                                    Model model) {
         SortOption sortOption = SortOption.from(sort);
-        List<WordDto> words;
+        List<WordDto> words = new ArrayList<>();
         if (categoryId == null || categoryId.isBlank()) {
             words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
         } else if (categoryId.equals("none")) {
             words = wordService.getWordsWithoutCategory();
-        } else {
+        }
+        else {
             Long id = Long.parseLong(categoryId);
             words = wordService.getWordsByCategory(id);
         }
@@ -109,5 +128,5 @@ public class WordController {
         model.addAttribute("categories", categoryService.getAllCategories());
 
         return "word-list";
-    }
+    }*/
 }

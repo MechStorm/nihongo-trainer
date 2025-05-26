@@ -1,6 +1,8 @@
 package com.example.nihongo_trainer.repository;
 
 import com.example.nihongo_trainer.entity.Word;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +17,7 @@ public interface WordRepository extends JpaRepository<Word, Long> {
             "LOWER(w.translation) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(w.example) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Word> searchWords(@Param("query") String query);
-    List<Word> findByCategoryId(Long categoryId);
-    List<Word> findByCategoryIsNull();
+    Page<Word> findByCategoryId(Long categoryId, Pageable pageable);
+    Page<Word> findByCategoryIsNull(Pageable pageable);
+    Page<Word> findAll(Pageable pageable);
 }

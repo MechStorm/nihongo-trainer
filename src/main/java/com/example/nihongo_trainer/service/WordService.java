@@ -7,11 +7,16 @@ import com.example.nihongo_trainer.repository.CategoryRepository;
 import com.example.nihongo_trainer.repository.WordRepository;
 import com.example.nihongo_trainer.utility.WordMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +24,7 @@ public class WordService {
     private final WordRepository wordRepository;
     private final CategoryRepository categoryRepository;
 
+    @Autowired
     public WordService(WordRepository wordRepository, CategoryRepository categoryRepository) {
         this.wordRepository = wordRepository;
         this.categoryRepository = categoryRepository;
@@ -92,15 +98,22 @@ public class WordService {
                 .collect(Collectors.toList());
     }
 
-    public List<WordDto> getWordsByCategory(Long categoryId) {
-        return wordRepository.findByCategoryId(categoryId).stream()
-                .map(WordMapper::toDto)
-                .collect(Collectors.toList());
-    }
+    public Page<WordDto> getWordsByCategory(String categoryId,
+                                            String sortField,
+                                            Sort.Direction direction,
+                                            Pageable pageable) {
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(direction, sortField));
+        Page<Word> wordPage;
 
-    public List<WordDto> getWordsWithoutCategory() {
-        return wordRepository.findByCategoryIsNull().stream()
-                .map(WordMapper::toDto)
-                .collect(Collectors.toList());
+        if (categoryId == null || categoryId.isEmpty()) {
+            wordPage = wordRepository.findAll(sortedPageable);
+        } else if (categoryId.equals("none")) {
+            wordPage = wordRepository.findByCategoryIsNull(sortedPageable);
+        } else {
+            Long id = Long.parseLong(categoryId);
+            wordPage = wordRepository.findByCategoryId(id, sortedPageable);
+        }
+
+        return wordPage.map(WordMapper::toDto);
     }
 }
