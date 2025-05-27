@@ -14,9 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,10 +75,16 @@ public class WordService {
         wordRepository.deleteById(id);
     }
 
-    public List<WordDto> searchWords(String query) {
-        return wordRepository.searchWords(query).stream()
-                .map(WordMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<WordDto> searchWords(String query,
+                                     String sortField,
+                                     Sort.Direction direction,
+                                     Pageable pageable) {
+        if (query == null || query.trim().isEmpty()) {
+            return getWordsByCategory(null, sortField, direction, pageable);
+        }
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(direction, sortField));
+        Page<Word> wordPage = wordRepository.searchWords(query, sortedPageable);
+        return wordPage.map(WordMapper::toDto);
     }
 
     public Optional<Word> getRandomWord() {

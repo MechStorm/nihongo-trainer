@@ -60,7 +60,6 @@ public class WordController {
         SortOption sortOption = SortOption.from(sort);
         Pageable pageable = PageRequest.of(page, size);
         Page<WordDto> wordPage = wordService.getWordsByCategory(categoryId, sortOption.getField(), sortOption.getDirection(), pageable);
-        //List<WordDto> words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
         List<CategoryDto> categories = categoryService.getAllCategories();
 
         model.addAttribute("words", wordPage);
@@ -95,38 +94,26 @@ public class WordController {
 
     @GetMapping("/words-list/search")
     public String searchWords(@RequestParam(defaultValue = "CREATED_DESC") String sort,
-                              @RequestParam("query") String query,
+                              @RequestParam(value = "query", required = false) String query,
+                              @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "size", defaultValue = "3") int size,
                               Model model) {
+
+        if (page < 0) {
+            page = 0;
+        }
+
         SortOption sortOption = SortOption.from(sort);
-        List<WordDto> words = wordService.searchWords(query);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WordDto> wordPage = wordService.searchWords(query, sortOption.getField(), sortOption.getDirection(), pageable);
 
         model.addAttribute("currentSort", sortOption.name());
-        model.addAttribute("words", words);
-        model.addAttribute("query", query);
+        model.addAttribute("words", wordPage.getContent());
+        model.addAttribute("query", "");
+        model.addAttribute("searchQuery", query);
+        model.addAttribute("currentPage", wordPage.getNumber());
+        model.addAttribute("totalPages", wordPage.getTotalPages());
+        model.addAttribute("totalItems", wordPage.getTotalElements());
         return "search-page";
     }
-
-    /*@GetMapping("/words-list/filter")
-    public String filterByCategory(@RequestParam(required = false) String categoryId,
-                                   @RequestParam(defaultValue = "CREATED_DESC") String sort,
-                                   Model model) {
-        SortOption sortOption = SortOption.from(sort);
-        List<WordDto> words = new ArrayList<>();
-        if (categoryId == null || categoryId.isBlank()) {
-            words = wordService.getAllWordsSorted(sortOption.getField(), sortOption.getDirection());
-        } else if (categoryId.equals("none")) {
-            words = wordService.getWordsWithoutCategory();
-        }
-        else {
-            Long id = Long.parseLong(categoryId);
-            words = wordService.getWordsByCategory(id);
-        }
-
-        model.addAttribute("words", words);
-        model.addAttribute("newWord", new WordDto());
-        model.addAttribute("selectedCategoryId", categoryId);
-        model.addAttribute("categories", categoryService.getAllCategories());
-
-        return "word-list";
-    }*/
 }

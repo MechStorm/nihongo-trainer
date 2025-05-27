@@ -16,7 +16,7 @@ public interface WordRepository extends JpaRepository<Word, Long> {
             "LOWER(w.japanese) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(w.translation) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(w.example) LIKE LOWER(CONCAT('%', :query, '%'))")
-    List<Word> searchWords(@Param("query") String query);
+    Page<Word> searchWords(@Param("query") String query, Pageable pageable);
     Page<Word> findByCategoryId(Long categoryId, Pageable pageable);
     Page<Word> findByCategoryIsNull(Pageable pageable);
     Page<Word> findAll(Pageable pageable);

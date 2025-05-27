@@ -7,7 +7,7 @@
 <th:block th:replace="~{layout :: header}"></th:block>
 <div th:fragment="content" class="container">
     <h1>Search</h1>
-
+<!--Sort form-->
     <form method="get" th:action="@{/api/words/words-list/search}" class="sort-form">
         <label for="sort">Sort by:</label>
         <select name="sort" id="sort" onchange="this.form.submit()">
@@ -19,12 +19,12 @@
             <option th:value="UPDATE_DESC" th:selected="${currentSort == 'UPDATE_DESC'}">By updated (newer)</option>
         </select>
     </form>
-
+<!--Search form-->
     <form th:action="@{/api/words/words-list/search}" method="get">
         <input type="text" name="query" placeholder="Search..." th:value="${query}">
         <button type="submit">Search</button>
     </form>
-
+<!--List of words-->
     <div th:each="word : ${words}" class="card">
         <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
         <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>
@@ -35,6 +35,35 @@
                 th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
         <p><strong>Category:</strong><span th:text="${word.categoryName != null ? word.categoryName : '-'}"></span></p>
     </div>
+<!--Pagination-->
+    <div th:if="${totalPages > 1}" class="pagination-container">
+        <div class="words-stat">
+            <span>Showing <span th:text="${totalItems}"></span> words</span>
+        </div>
+        <nav>
+            <ul class="pagination-items">
+<!--Prev page-->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="${currentPage > 0} ? @{/api/words/words-list/search(query=${searchQuery},
+                       sort=${currentSort}, page=${currentPage - 1}, size=3)} : '#'">Previous</a>
+                </li>
+<!--Number of pages-->
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/api/words/words-list/search(query=${searchQuery},
+                       sort=${currentSort}, page=${i}, size=3)}"
+                       th:text="${i + 1}"></a>
+                </li>
+<!--Next page-->
+                <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="${currentPage < totalPages - 1} ? @{/api/words/words-list/search(query=${searchQuery},
+                       sort=${currentSort}, page=${currentPage + 1}, size=3)} : '#'">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
     <a th:href="@{/api/words/words-list}">Back to list</a>
 </div>
 </body>

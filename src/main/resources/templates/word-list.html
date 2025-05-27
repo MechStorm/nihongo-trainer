@@ -8,7 +8,6 @@
 <div th:fragment="content" class="container">
     <h1>Dictionary</h1>
 
-<!--should fix sort on every category-->
     <form method="get" th:action="@{/api/words/words-list}" class="sort-form">
         <label for="sort">Sort by:</label>
         <select name="sort" id="sort" onchange="this.form.submit()">
@@ -67,7 +66,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="word : ${words}" class="card">
+        <tr th:each="word : ${words}">
             <td th:text="${word.id}"></td>
             <td th:text="${word.japanese}"></td>
             <td th:text="${word.translation}"></td>
@@ -80,22 +79,22 @@
     </table>
 
     <div th:if="${totalPages > 1}" class="pagination-container">
-        <div>
+        <div class="words-stat">
             <span>Showing <span th:text="${totalItems}"></span> words</span>
         </div>
         <nav>
             <ul class="pagination-items">
-                <li class="pagination-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                     <a class="page-link"
                        th:href="${currentPage > 0} ? @{/api/words/words-list(categoryId=${selectedCategoryId},
                        sort=${currentSort}, page=${currentPage - 1}, size=3)} : '#'">Previous</a>
                 </li>
-                <li class="pagination-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
                 th:classappend="${i == currentPage} ? 'active'">
                     <a class="page-link" th:href="@{/api/words/words-list(categoryId=${selectedCategoryId},
                        sort=${currentSort}, page=${i}, size=3)}" th:text="${i + 1}"></a>
                 </li>
-                <li class="pagination-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
                     <a class="page-link" th:href="${currentPage < totalPages - 1} ? @{/api/words/words-list(categoryId=${selectedCategoryId},
                        sort=${currentSort}, page=${currentPage + 1}, size=3)} : '#'">Next</a>
                 </li>
