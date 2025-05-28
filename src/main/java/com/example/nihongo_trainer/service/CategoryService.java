@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -22,13 +21,6 @@ public class CategoryService {
     }
 
     public List<CategoryDto> getAllCategories() {
-//        return categoryRepository.findAll()
-//                .stream()
-//                .map(cat -> new CategoryDto(cat.getId(),
-//                        cat.getName(),
-//                        cat.getWords() != null ? cat.getWords().size() : 0))
-//                .collect(Collectors.toList());
-
         return categoryRepository.findAllWithWordCount();
     }
 

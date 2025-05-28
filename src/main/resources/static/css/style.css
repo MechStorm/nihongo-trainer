@@ -149,7 +149,8 @@ table {
     border-radius: 8px;
     padding: 16px;
     margin: 8px;
-    background: #f9f9f9;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .word-table tr {
@@ -290,4 +291,51 @@ table {
 .words-stat {
     font-size: 16px;
     color: #495057;
+}
+
+/*Search*/
+.alert-info {
+    padding: 15px;
+    background-color: #e7f3fe;
+    border: 1px solid #b6d4fe;
+    border-radius: 5px;
+    color: #31708f;
+    text-align: center;
+}
+
+.alert-success {
+    padding: 15px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    color: #155724;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
 }

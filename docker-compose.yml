@@ -6,8 +6,8 @@ services:
     container_name: nihongo-postgres
     environment:
       POSTGRES_DB: nihongo_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -26,8 +26,8 @@ services:
       - nihongo-network
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nihongo_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
 volumes:
   postgres-data:

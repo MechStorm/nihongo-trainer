@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    @Query("SELECT new com.example.nihongo_trainer.dto.CategoryDto(c.id, c.name, COUNT(w.id)) " +
+    @Query("SELECT new com.example.nihongo_trainer.dto.CategoryDto(c.id, c.name, c.description, COUNT(w.id)) " +
             "FROM Category c LEFT JOIN c.words w " +
-            "GROUP BY c.id, c.name")
+            "GROUP BY c.id, c.name, c.description")
     List<CategoryDto> findAllWithWordCount();
 }

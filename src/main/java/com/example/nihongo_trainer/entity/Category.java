@@ -10,13 +10,15 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
     private List<Word> words;
 
     public Category() {}
 
-    public Category(String name) {
+    public Category(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public Long getId() {
@@ -37,6 +39,14 @@ public class Category {
 
     public List<Word> getWords() {
         return words;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setWords(List<Word> words) {

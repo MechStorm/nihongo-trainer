@@ -21,7 +21,7 @@
     </form>
 
     <form th:action="@{/api/words/words-list/search}" method="get">
-        <input type="text" name="query" placeholder="Search..." th:value="${query}">
+        <input type="text" name="query" placeholder="Search..." th:value="${searchQuery}">
         <button type="submit">Search</button>
     </form>
 
