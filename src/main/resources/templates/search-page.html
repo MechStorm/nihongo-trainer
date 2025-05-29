@@ -24,7 +24,10 @@
     </form>
     <!--Search form-->
     <form class="mb-3" th:action="@{/api/words/words-list/search}" method="get">
-        <input type="text" name="query" placeholder="Search..." th:value="${query}">
+        <div class="autocomplete-wrapper">
+            <input id="search-input" class="search-input" type="text" name="query" placeholder="Search..." th:value="${query}" autocomplete="off">
+            <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+        </div>
         <input type="hidden" name="sort" value="CREATED_DESC">
         <button class="btn btn-primary" type="submit">Search</button>
     </form>
@@ -77,5 +80,7 @@
 
     <a class="btn btn-secondary mt-3" th:href="@{/api/words/words-list}">Back to list</a>
 </div>
+
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

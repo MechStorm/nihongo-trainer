@@ -120,4 +120,17 @@ public class WordService {
 
         return wordPage.map(WordMapper::toDto);
     }
+
+    public List<WordDto> autocomplete(String term) {
+        if (term == null || term.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Word> words = wordRepository.findWordByTerm(term);
+
+        return words.stream()
+                .map(WordMapper::toDto)
+                .limit(5)
+                .collect(Collectors.toList());
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -114,5 +115,15 @@ public class WordController {
         model.addAttribute("totalPages", wordPage.getTotalPages());
         model.addAttribute("totalItems", wordPage.getTotalElements());
         return "search-page";
+    }
+
+    @GetMapping("/autocomplete")
+    @ResponseBody
+    public List<WordDto> autoComplete(@RequestParam("term") String term) {
+        try {
+            return wordService.autocomplete(term);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 }
