@@ -20,10 +20,12 @@
     </div>
 </header>
 
-<main class="page-content">
-    <div th:replace="~{::content}"></div>
-</main>
+<div th:fragment="layout">
+    <main class="page-content">
+        <div th:insert="~{::content}"></div>
+    </main>
+    <script th:src="@{/js/script.js}"></script>
+</div>
 
-<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

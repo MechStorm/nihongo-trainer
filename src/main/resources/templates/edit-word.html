@@ -3,33 +3,33 @@
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
 </head>
-<body>
 <th:block th:replace="~{layout :: header}"></th:block>
-<div th:fragment="content" class="container">
-    <h1>Edit word</h1>
-    <form th:action="@{/api/words/words-list/edit}" th:object="${word}" method="post">
-        <input type="hidden" th:field="*{id}"/>
-        <label>Japanese word:
-            <input type="text" th:field="*{japanese}" required/>
-        </label><br>
-        <label>Translation:
-            <input type="text" th:field="*{translation}" required/>
-        </label><br>
-        <label>Example:
-            <input type="text" th:field="*{example}" required/>
-        </label><br>
-        <label>Category:
-            <select th:field="*{categoryId}">
-                <option value="" th:text="'-- No category --'"
-                        th:selected="${word.categoryId == null}"></option>
-                <option th:each="category : ${categories}"
-                        th:value="${category.id}"
-                        th:text="${category.name}"></option>
-            </select>
-        </label><br>
-        <button type="submit">Save</button>
-    </form>
-    <a th:href="@{/api/words/words-list}">Back to list</a>
+<div th:replace="layout :: layout">
+    <div th:fragment="content" class="container">
+        <h1>Edit word</h1>
+        <form th:action="@{/api/words/words-list/edit}" th:object="${word}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            <label>Japanese word:
+                <input type="text" th:field="*{japanese}" required/>
+            </label><br>
+            <label>Translation:
+                <input type="text" th:field="*{translation}" required/>
+            </label><br>
+            <label>Example:
+                <input type="text" th:field="*{example}" required/>
+            </label><br>
+            <label>Category:
+                <select th:field="*{categoryId}">
+                    <option value="" th:text="'-- No category --'"
+                            th:selected="${word.categoryId == null}"></option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"></option>
+                </select>
+            </label><br>
+            <button type="submit">Save</button>
+        </form>
+        <a th:href="@{/api/words/words-list}">Back to list</a>
+    </div>
 </div>
-</body>
 </html>
