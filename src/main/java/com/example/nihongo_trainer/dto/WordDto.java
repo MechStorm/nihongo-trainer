@@ -1,5 +1,7 @@
 package com.example.nihongo_trainer.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 public class WordDto {
@@ -11,11 +13,14 @@ public class WordDto {
     private LocalDateTime updatedAt;
     private Long categoryId;
     private String categoryName;
+    private MultipartFile image;
+    private String imagePath;
 
     public WordDto() {}
 
     public WordDto(Long id, String japanese, String translation, String example,
-                   LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, String categoryName) {
+                   LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, String categoryName,
+                   MultipartFile image, String imagePath) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
@@ -24,6 +29,8 @@ public class WordDto {
         this.updatedAt = updatedAt;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.image = image;
+        this.imagePath = imagePath;
     }
 
     public Long getId() {
@@ -88,5 +95,21 @@ public class WordDto {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

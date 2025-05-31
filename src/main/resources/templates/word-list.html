@@ -53,6 +53,9 @@
                     th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
             <p><strong>Category:</strong><span th:text="${word.categoryName != null ? word.categoryName : '-'}"></span>
             </p>
+            <div th:if="${word.imagePath != null}">
+                <img th:src="@{${word.imagePath}}" alt="Image" width="200"/>
+            </div>
             <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
             <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post"
                   style="display:inline-block">
@@ -110,7 +113,7 @@
         </div>
         <hr>
         <h2>Add new word</h2>
-        <form th:action="@{/api/words/words-list}" th:object="${newWord}" method="post">
+        <form th:action="@{/api/words/words-list}" th:object="${newWord}" method="post" enctype="multipart/form-data">
             <label>Japanese word:
                 <input type="text" th:field="*{japanese}" required/>
             </label><br>
@@ -129,6 +132,10 @@
                             th:text="${category.name}"></option>
                 </select>
             </label><br>
+            <label>Image:
+                <input type="file" name="image" accept="image/*">
+            </label><br>
+
             <button type="submit">Add</button>
         </form>
     </div>

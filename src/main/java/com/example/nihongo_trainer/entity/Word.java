@@ -16,6 +16,7 @@ public class Word {
     private String japanese;
     private String translation;
     private String example;
+    private String imagePath;
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -27,13 +28,16 @@ public class Word {
 
     public Word(){}
 
-    public Word(Long id, String japanese, String translation, String example, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Word(Long id, String japanese, String translation,
+                String example, LocalDateTime createdAt, LocalDateTime updatedAt, String imagePath
+                ) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
         this.example = example;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.imagePath = imagePath;
     }
 
     @PrePersist
@@ -95,5 +99,13 @@ public class Word {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

@@ -10,7 +10,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +38,7 @@ public class WordService {
 
     public Word addWord(WordDto wordDto) {
         Word word = new Word();
+
         word.setJapanese(wordDto.getJapanese());
         word.setTranslation(wordDto.getTranslation());
         word.setExample(wordDto.getExample());
@@ -41,6 +48,25 @@ public class WordService {
             word.setCategory(category);
         } else {
             word.setCategory(null);
+        }
+
+        MultipartFile imageFile = wordDto.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get("uploads");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                word.setImagePath("/uploads/" + fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save image", e);
+            }
         }
 
         return wordRepository.save(word);

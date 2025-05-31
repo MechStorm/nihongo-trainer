@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,16 +77,26 @@ public class WordController {
     @GetMapping("/words-list/edit/{id}")
     public String editWord(@PathVariable Long id, Model model) {
         Word word = wordService.getWordById(id);
-        WordDto wordDto = new WordDto(
-                word.getId(),
-                word.getJapanese(),
-                word.getTranslation(),
-                word.getExample(),
-                word.getCreatedAt(),
-                word.getUpdatedAt(),
-                word.getCategory() != null ? word.getCategory().getId() : null,
-                word.getCategory() != null ? word.getCategory().getName() : null
-        );
+        WordDto wordDto = new WordDto();
+        wordDto.setId(word.getId());
+        wordDto.setJapanese(word.getJapanese());
+        wordDto.setTranslation(word.getTranslation());
+        wordDto.setExample(word.getExample());
+
+        wordDto.setCreatedAt(word.getCreatedAt()
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
+                .toLocalDateTime());
+        wordDto.setUpdatedAt(word.getUpdatedAt() != null
+                ? word.getUpdatedAt().atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("Europe/Moscow"))
+                .toLocalDateTime()
+                : null);
+
+        wordDto.setCategoryId(word.getCategory() != null ? word.getCategory().getId() : null);
+        wordDto.setCategoryName(word.getCategory() != null ? word.getCategory().getName() : null);
+
+        wordDto.setImagePath(word.getImagePath());
 
         model.addAttribute("word", wordDto);
         model.addAttribute("categories", categoryService.getAllCategories());
