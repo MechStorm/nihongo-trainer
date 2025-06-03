@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZoneId;
 import java.util.Collections;
@@ -37,8 +38,10 @@ public class WordController {
     }
 
     @PostMapping("/words-list/edit")
-    public String updateWord(@ModelAttribute WordDto wordDto) {
-        wordService.updateWord(wordDto);
+    public String updateWord(@ModelAttribute WordDto wordDto,
+                             @RequestParam("image") MultipartFile image,
+                             @RequestParam(value = "deleteImage", required = false) boolean deleteImage) {
+        wordService.updateWord(wordDto, image, deleteImage);
         return "redirect:/api/words/words-list";
     }
 

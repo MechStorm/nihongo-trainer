@@ -7,7 +7,7 @@
 <div th:replace="layout :: layout">
     <div th:fragment="content" class="container">
         <h1>Edit word</h1>
-        <form th:action="@{/api/words/words-list/edit}" th:object="${word}" method="post">
+        <form th:action="@{/api/words/words-list/edit}" th:object="${word}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}"/>
             <label>Japanese word:
                 <input type="text" th:field="*{japanese}" required/>
@@ -27,9 +27,24 @@
                             th:text="${category.name}"></option>
                 </select>
             </label><br>
-            <button type="submit">Save</button>
+            <div class="mb-3" th:if="${word.imagePath != null}">
+                <label class="form-label">Current image:</label>
+                <div class="word-image">
+                    <img th:src="@{${word.imagePath}}" alt="Current Image" style="max-width: 200px; height: auto;"/>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="deleteImage" name="deleteImage"/>
+                    <label for="deleteImage" class="form-check-label">Delete current image</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="image">Upload new image (optional):</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*">
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
         </form>
-        <a th:href="@{/api/words/words-list}">Back to list</a>
+        <a class="btn btn-secondary" th:href="@{/api/words/words-list}">Back to list</a>
     </div>
 </div>
 </html>

@@ -53,13 +53,13 @@
                     th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
             <p><strong>Category:</strong><span th:text="${word.categoryName != null ? word.categoryName : '-'}"></span>
             </p>
-            <div th:if="${word.imagePath != null}">
+            <div class="word-image" th:if="${word.imagePath != null}">
                 <img th:src="@{${word.imagePath}}" alt="Image" width="200"/>
             </div>
-            <a th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/api/words/words-list/edit/{id}(id=${word.id})}">Edit</a>
             <form th:action="@{/api/words/words-list/delete/{id}(id=${word.id})}" method="post"
                   style="display:inline-block">
-                <button type="submit" onclick="return confirm('Delete this word?')">Delete</button>
+                <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Delete this word?')">Delete</button>
             </form>
         </div>
 

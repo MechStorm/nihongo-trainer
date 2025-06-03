@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -77,7 +76,7 @@ public class WordService {
     }
 
     @Transactional
-    public Word updateWord(WordDto wordDto) {
+    public Word updateWord(WordDto wordDto, MultipartFile image, boolean deleteImage) {
         Word word = wordRepository.findById(wordDto.getId()).orElseThrow(() -> new RuntimeException("Word not found"));
         word.setJapanese(wordDto.getJapanese());
         word.setTranslation(wordDto.getTranslation());
@@ -90,11 +89,53 @@ public class WordService {
             word.setCategory(null);
         }
 
+        if (deleteImage && word.getImagePath() != null) {
+            try {
+                Path imagePath = Paths.get("uploads", word.getImagePath().replace("/uploads/", ""));
+                Files.deleteIfExists(imagePath);
+                word.setImagePath(null);
+            } catch (IOException e) {
+                throw new RuntimeException("failed to delete image", e);
+            }
+        }
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                if (word.getImagePath() != null) {
+                    Path oldImagePath = Paths.get("uploads" + word.getImagePath().replace("/uploads/", ""));
+                    Files.deleteIfExists(oldImagePath);
+                }
+
+                String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                Path uploadPath = Paths.get("uploads");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                word.setImagePath("/uploads/" + fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save image", e);
+            }
+        }
+
         return wordRepository.save(word);
     }
 
     @Transactional
     public void deleteWord(Long id) {
+        Word word = wordRepository.findById(id).orElseThrow(() -> new RuntimeException("Word not found"));
+        if (word.getImagePath() != null) {
+            try {
+                Path imagePath = Paths.get("uploads" + word.getImagePath().replace("/uploads/", ""));
+                Files.deleteIfExists(imagePath);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete image", e);
+            }
+        }
         wordRepository.deleteById(id);
     }
 
