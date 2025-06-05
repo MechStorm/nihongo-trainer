@@ -25,11 +25,14 @@ public class Word {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+    private boolean isLearned = false;
+    private boolean needsReview = false;
 
     public Word(){}
 
     public Word(Long id, String japanese, String translation,
-                String example, LocalDateTime createdAt, LocalDateTime updatedAt, String imagePath
+                String example, LocalDateTime createdAt, LocalDateTime updatedAt, String imagePath,
+                boolean isLearned, boolean needsReview
                 ) {
         this.id = id;
         this.japanese = japanese;
@@ -38,6 +41,8 @@ public class Word {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.imagePath = imagePath;
+        this.isLearned = isLearned;
+        this.needsReview = needsReview;
     }
 
     @PrePersist
@@ -107,5 +112,21 @@ public class Word {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isLearned() {
+        return isLearned;
+    }
+
+    public void setLearned(boolean learned) {
+        isLearned = learned;
+    }
+
+    public boolean isNeedsReview() {
+        return needsReview;
+    }
+
+    public void setNeedsReview(boolean needsReview) {
+        this.needsReview = needsReview;
     }
 }

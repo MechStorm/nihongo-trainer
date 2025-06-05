@@ -15,12 +15,14 @@ public class WordDto {
     private String categoryName;
     private MultipartFile image;
     private String imagePath;
+    private boolean isLearned;
+    private boolean needsReview;
 
     public WordDto() {}
 
     public WordDto(Long id, String japanese, String translation, String example,
                    LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, String categoryName,
-                   MultipartFile image, String imagePath) {
+                   MultipartFile image, String imagePath, boolean isLearned, boolean needsReview) {
         this.id = id;
         this.japanese = japanese;
         this.translation = translation;
@@ -31,6 +33,8 @@ public class WordDto {
         this.categoryName = categoryName;
         this.image = image;
         this.imagePath = imagePath;
+        this.isLearned = isLearned;
+        this.needsReview = needsReview;
     }
 
     public Long getId() {
@@ -111,5 +115,21 @@ public class WordDto {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isLearned() {
+        return isLearned;
+    }
+
+    public void setLearned(boolean learned) {
+        isLearned = learned;
+    }
+
+    public boolean isNeedsReview() {
+        return needsReview;
+    }
+
+    public void setNeedsReview(boolean needsReview) {
+        this.needsReview = needsReview;
     }
 }

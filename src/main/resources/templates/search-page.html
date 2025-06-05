@@ -7,86 +7,89 @@
 
 <div th:replace="layout :: layout">
     <div th:fragment="content" class="container">
-            <h1>Search</h1>
-            <!--Sort form-->
-            <form method="get" th:action="@{/api/words/words-list/search}" class="sort-form mb-3">
-                <label for="sort">Sort by:</label>
-                <select name="sort" id="sort" onchange="this.form.submit()">
-                    <option th:value="CREATED_DESC" th:selected="${currentSort == 'CREATED_DESC'}">By date (newer)
-                    </option>
-                    <option th:value="CREATED_ASC" th:selected="${currentSort == 'CREATED_ASC'}">By date (older)
-                    </option>
-                    <option th:value="ALPHA_ASC" th:selected="${currentSort == 'ALPHA_ASC'}">By alphabet (A-Z)</option>
-                    <option th:value="ALPHA_DESC" th:selected="${currentSort == 'ALPHA_DESC'}">By alphabet (Z-A)
-                    </option>
-                    <option th:value="UPDATE_ASC" th:selected="${currentSort == 'UPDATE_ASC'}">By updated (older)
-                    </option>
-                    <option th:value="UPDATE_DESC" th:selected="${currentSort == 'UPDATE_DESC'}">By updated (newer)
-                    </option>
-                </select>
-                <input type="hidden" name="query" th:value="${searchQuery != null} ? ${searchQuery} : ''"/>
-                <input type="hidden" name="page" th:value="${currentPage}"/>
-                <input type="hidden" name="size" th:value="3"/>
-            </form>
-            <!--Search form-->
-            <form class="mb-3" th:action="@{/api/words/words-list/search}" method="get">
-                <div class="autocomplete-wrapper">
-                    <input id="search-input" class="search-input" type="text" name="query" placeholder="Search..."
-                           th:value="${query}" autocomplete="off">
-                    <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
-                </div>
-                <input type="hidden" name="sort" value="CREATED_DESC">
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-            <!--Search result info-->
-            <div th:if="${words != null and !words.isEmpty()}" class="alert alert-success mb-3">
-                Found <span th:text="${totalItems}"></span> words for query: <span th:text="${searchQuery}"></span><br>
+        <h1>Search</h1>
+        <!--Sort form-->
+        <form method="get" th:action="@{/api/words/words-list/search}" class="sort-form mb-3">
+            <label for="sort">Sort by:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()">
+                <option th:value="CREATED_DESC" th:selected="${currentSort == 'CREATED_DESC'}">By date (newer)
+                </option>
+                <option th:value="CREATED_ASC" th:selected="${currentSort == 'CREATED_ASC'}">By date (older)
+                </option>
+                <option th:value="ALPHA_ASC" th:selected="${currentSort == 'ALPHA_ASC'}">By alphabet (A-Z)</option>
+                <option th:value="ALPHA_DESC" th:selected="${currentSort == 'ALPHA_DESC'}">By alphabet (Z-A)
+                </option>
+                <option th:value="UPDATE_ASC" th:selected="${currentSort == 'UPDATE_ASC'}">By updated (older)
+                </option>
+                <option th:value="UPDATE_DESC" th:selected="${currentSort == 'UPDATE_DESC'}">By updated (newer)
+                </option>
+            </select>
+            <input type="hidden" name="query" th:value="${searchQuery != null} ? ${searchQuery} : ''"/>
+            <input type="hidden" name="page" th:value="${currentPage}"/>
+            <input type="hidden" name="size" th:value="3"/>
+        </form>
+        <!--Search form-->
+        <form class="mb-3" th:action="@{/api/words/words-list/search}" method="get">
+            <div class="autocomplete-wrapper">
+                <input id="search-input" class="search-input" type="text" name="query" placeholder="Search..."
+                       th:value="${query}" autocomplete="off">
+                <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
             </div>
-            <div th:if="${words == null or words.isEmpty()}" class="alert alert-info">
-                <p>No words found. Please enter a search query.</p>
+            <input type="hidden" name="sort" value="CREATED_DESC">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+        <!--Search result info-->
+        <div th:if="${words != null and !words.isEmpty()}" class="alert alert-success mb-3">
+            Found <span th:text="${totalItems}"></span> words for query: <span th:text="${searchQuery}"></span><br>
+        </div>
+        <div th:if="${words == null or words.isEmpty()}" class="alert alert-info">
+            <p>No words found. Please enter a search query.</p>
+        </div>
+        <!--List of words-->
+        <div th:each="word : ${words}" class="card">
+            <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
+            <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>
+            <p><strong>Example:</strong><span th:text="${word.example}"></span></p>
+            <p><strong>Date created:</strong><span
+                    th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+            <p><strong>Date updated:</strong><span
+                    th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+            <p><strong>Category:</strong><span
+                    th:text="${word.categoryName != null ? word.categoryName : '-'}"></span></p>
+            <div class="word-image" th:if="${word.imagePath != null}">
+                <img th:src="@{${word.imagePath}}" alt="Image" width="200"/>
             </div>
-            <!--List of words-->
-            <div th:each="word : ${words}" class="card">
-                <p><strong>Japanese word:</strong><span th:text="${word.japanese}"></span></p>
-                <p><strong>Translation:</strong><span th:text="${word.translation}"></span></p>
-                <p><strong>Example:</strong><span th:text="${word.example}"></span></p>
-                <p><strong>Date created:</strong><span
-                        th:text="${#temporals.format(word.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-                <p><strong>Date updated:</strong><span
-                        th:text="${#temporals.format(word.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-                <p><strong>Category:</strong><span
-                        th:text="${word.categoryName != null ? word.categoryName : '-'}"></span></p>
+        </div>
+        <!--Pagination-->
+        <div th:if="${totalPages > 1}" class="pagination-container">
+            <div class="words-stat">
+                <span>Showing <span th:text="${totalItems}"></span> words</span>
             </div>
-            <!--Pagination-->
-            <div th:if="${totalPages > 1}" class="pagination-container">
-                <div class="words-stat">
-                    <span>Showing <span th:text="${totalItems}"></span> words</span>
-                </div>
-                <nav>
-                    <ul class="pagination-items">
-                        <!--Prev page-->
-                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                            <a class="page-link"
-                               th:href="${currentPage > 0} ? @{/api/words/words-list/search(query=${searchQuery},
+            <nav>
+                <ul class="pagination-items">
+                    <!--Prev page-->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="${currentPage > 0} ? @{/api/words/words-list/search(query=${searchQuery},
                        sort=${currentSort}, page=${currentPage - 1}, size=3)} : '#'">Previous</a>
-                        </li>
-                        <!--Number of pages-->
-                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
-                            th:classappend="${i == currentPage} ? 'active'">
-                            <a class="page-link" th:href="@{/api/words/words-list/search(query=${searchQuery},
+                    </li>
+                    <!--Number of pages-->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/api/words/words-list/search(query=${searchQuery},
                        sort=${currentSort}, page=${i}, size=3)}"
-                               th:text="${i + 1}"></a>
-                        </li>
-                        <!--Next page-->
-                        <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
-                            <a class="page-link" th:href="${currentPage < totalPages - 1} ? @{/api/words/words-list/search(query=${searchQuery},
+                           th:text="${i + 1}"></a>
+                    </li>
+                    <!--Next page-->
+                    <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                        <a class="page-link" th:href="${currentPage < totalPages - 1} ? @{/api/words/words-list/search(query=${searchQuery},
                        sort=${currentSort}, page=${currentPage + 1}, size=3)} : '#'">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
-            <a class="btn btn-secondary mt-3" th:href="@{/api/words/words-list}">Back to list</a>
+        <a class="btn btn-secondary mt-3" th:href="@{/api/words/words-list}">Back to list</a>
     </div>
 </div>
 </html>

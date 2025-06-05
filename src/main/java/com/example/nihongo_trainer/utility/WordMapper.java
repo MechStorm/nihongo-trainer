@@ -27,7 +27,22 @@ public class WordMapper {
         dto.setCategoryName(word.getCategory() != null ? word.getCategory().getName() : null);
 
         dto.setImagePath(word.getImagePath());
+        dto.setLearned(word.isLearned());
+        dto.setNeedsReview(word.isNeedsReview());
 
         return dto;
+    }
+
+    public static Word toEntity(WordDto dto) {
+        Word word = new Word();
+        word.setId(dto.getId());
+        word.setJapanese(dto.getJapanese());
+        word.setTranslation(dto.getTranslation());
+        word.setExample(dto.getExample());
+        word.setImagePath(dto.getImagePath());
+        word.setLearned(dto.isLearned());
+        word.setNeedsReview(dto.isNeedsReview());
+
+        return word;
     }
 }

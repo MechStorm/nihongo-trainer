@@ -200,4 +200,19 @@ public class WordService {
                 .limit(5)
                 .collect(Collectors.toList());
     }
+
+    public List<WordDto> getAllWordsForFlashCards() {
+        return wordRepository.findAll()
+                .stream()
+                .map(WordMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateWordStatus(Long id, boolean isLearned, boolean needsReview) {
+        Word word = wordRepository.findById(id).orElseThrow(() -> new RuntimeException("Word not found"));
+        word.setLearned(isLearned);
+        word.setNeedsReview(needsReview);
+        wordRepository.save(word);
+    }
 }
